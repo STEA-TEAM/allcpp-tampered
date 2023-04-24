@@ -1,11 +1,13 @@
-import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import path from "path";
-import fs from "fs";
-import css from "rollup-plugin-import-css";
-import externalGlobals from "rollup-plugin-external-globals";
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import path from 'path';
+import fs from 'fs';
+import css from 'rollup-plugin-import-css';
+import externalGlobals from 'rollup-plugin-external-globals';
 // https://vitejs.dev/config/
+
+const PROJECT_NAME = 'ALLCPP Evolved';
 
 const FILE_NAME = 'main.user.js';
 const headerText = fs.readFileSync('./src/header.js').toString();
@@ -45,6 +47,7 @@ function header(text, dev = true) {
   return {
     name: 'vite-plugin-header',
     generateBundle(OutputOptions, ChunkInfo) {
+      text = text.replace('$PROJECT_NAME$', PROJECT_NAME);
       let filename = String(OutputOptions.name).replace('dist/', '');
       ChunkInfo[filename].code = text + '\n' + ChunkInfo[filename].code;
       if (dev) {
@@ -56,6 +59,7 @@ function header(text, dev = true) {
             '/dist/' + FILE_NAME
           )}\n` +
           text.slice(index);
+        newText = newText.replace(PROJECT_NAME, PROJECT_NAME + ' [Dev]');
         if (!fs.existsSync('dist')) {
           fs.mkdirSync('dist');
         }

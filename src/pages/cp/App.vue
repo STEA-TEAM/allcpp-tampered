@@ -26,10 +26,11 @@
           @update:need-validate="validatePurchaser = $event"
         />
         <q-input
+          v-if="!validatePurchaser"
+          :disable="selectedTicketId < 0"
           label="购票数量"
           outlined
           mask="###"
-          min="1"
           :model-value="ticketCount"
           @update:modelValue="updateTicketCount"
         >
@@ -50,6 +51,17 @@
             />
           </template>
         </q-input>
+        <q-select
+          v-if="validatePurchaser"
+          :disable="selectedTicketId < 0"
+          label="选择购票人"
+          multiple
+          :options="options"
+          outlined
+          stack-label
+          use-chips
+          v-model="purchasers"
+        />
       </q-page>
     </q-page-container>
   </q-layout>
@@ -68,7 +80,11 @@ const toggleLeftDrawer = () => {
 
 const selectedTicketId = ref(-1);
 const validatePurchaser = ref(false);
+
+const options = ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'];
+
 const ticketCount = ref('1');
+const purchasers = ref([]);
 
 const updateTicketCount = (value) => {
   if (value === '') {

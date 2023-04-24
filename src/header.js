@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        ALLCPP Evolved
+// @name        $PROJECT_NAME$
 // @description Auto buy CPP tickets for AllCPP conferences.
 // @namespace   https://github.com/ParticleG
 // @version     1.0.0
