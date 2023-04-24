@@ -1,5 +1,5 @@
-import www from './www';
+import cp from './cp';
 
 export default {
-  www,
+  cp,
 };

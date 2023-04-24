@@ -48,13 +48,13 @@ function header(text, dev = true) {
       let filename = String(OutputOptions.name).replace('dist/', '');
       ChunkInfo[filename].code = text + '\n' + ChunkInfo[filename].code;
       if (dev) {
-        let index = String(text).lastIndexOf('\n');
+        let index = String(text).lastIndexOf('// ==/UserScript==');
         let newText =
           text.slice(0, index) +
-          `\n// @require   file:///${path.join(
+          `// @require     file:///${path.join(
             __dirname,
             '/dist/' + FILE_NAME
-          )}` +
+          )}\n` +
           text.slice(index);
         if (!fs.existsSync('dist')) {
           fs.mkdirSync('dist');
@@ -63,6 +63,8 @@ function header(text, dev = true) {
           path.join(__dirname, '/dist/' + FILE_NAME.replace('.js', '.dev.js')),
           newText
         );
+        console.info('\nPut following code in your tampermonkey script: \n');
+        console.log(newText);
       }
     },
   };
