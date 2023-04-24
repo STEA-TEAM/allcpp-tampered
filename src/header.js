@@ -5,8 +5,8 @@
 // @version     1.0.0
 // @author      ParticleG <particle_g@outlook.com>
 // @icon        https://cp.allcpp.cn/favicon.ico
-// @updateURL   https://github.com/STEA-TEAM/allcpp-evolved/raw/main/dist/main.user.js
-// @downloadURL https://github.com/STEA-TEAM/allcpp-evolved/raw/main/dist/main.user.js
+// @updateURL   https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/main.user.js
+// @downloadURL https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/main.user.js
 // @match       *://*.allcpp.cn/*
 // @connect     allcpp.cn
 // @grant       GM_xmlhttpRequest
