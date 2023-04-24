@@ -1,21 +1,61 @@
 <template>
-  <q-list>
-    <q-item v-for="ticketType in ticketTypeList" :key="ticketType.id">
+  <q-list bordered separator>
+    <q-item v-if="ticketTypeList.length === 0">
       <q-item-section>
-        <q-item-label>{{ ticketType.name }}</q-item-label>
-        <q-item-label caption>{{ ticketType.price }} 元</q-item-label>
+        <q-item-label>暂无票种数据</q-item-label>
+        <q-item-label caption> 加载中……</q-item-label>
       </q-item-section>
       <q-item-section side>
-        <q-checkbox color="primary" label="购买" v-model="ticketType.value" />
+        <q-spinner color="grey" size="24px" />
+      </q-item-section>
+    </q-item>
+    <q-item
+      v-for="(ticketType, index) in ticketTypeList"
+      :key="index"
+      :active="ticketType.id === selectedTicketId"
+      active-class="bg-primary text-black"
+      clickable
+      v-ripple
+      @click="selectedTicketId = ticketType.id"
+    >
+      <q-item-section>
+        <q-item-label>{{ ticketType.name }}</q-item-label>
+        <q-item-label caption>
+          限购{{ ticketType.limit }}张，剩余{{ ticketType.remain }}张
+        </q-item-label>
+      </q-item-section>
+      <q-item-section side>
+        <q-item-label caption>{{ ticketType.price }}￥</q-item-label>
       </q-item-section>
     </q-item>
   </q-list>
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 
-const ticketTypeList = reactive(null);
+const props = defineProps({
+  modelValue: {
+    type: Number,
+    required: true,
+  },
+  needValidate: {
+    type: Boolean,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['update:modelValue', 'update:needValidate']);
+
+const ticketTypeList = reactive([]);
+const selectedTicketId = computed({
+  get: () => props.modelValue,
+  set: (value) => emit('update:modelValue', value),
+});
+const validatePurchaser = computed({
+  get: () => props.needValidate,
+  set: (value) => emit('update:needValidate', value),
+});
 
 const eventMainId = Object.fromEntries(
   location.hash
@@ -29,16 +69,16 @@ GM_xmlhttpRequest({
   responseType: 'json',
   url: `https://www.allcpp.cn/allcpp/ticket/getTicketTypeList.do?eventMainId=${eventMainId}`,
   onload: function (res) {
-    ticketTypeList.value = res.response['ticketTypeList'].map((ticketType) => {
-      ticketType['ticketPrice'] = ticketType['ticketPrice'] / 100;
-      return {
+    res.response['ticketTypeList'].forEach((ticketType) => {
+      validatePurchaser.value = ticketType['realnameAuth'];
+      ticketTypeList.push({
         id: ticketType['id'],
         name: ticketType['ticketName'],
+        limit: ticketType['purchaseNum'],
         price: (ticketType['ticketPrice'] / 100).toFixed(2),
-        value: false,
-      };
+        remain: ticketType['remainderNum'],
+      });
     });
-    console.log(ticketTypeList);
   },
   onerror: function (response) {
     console.log(response);
