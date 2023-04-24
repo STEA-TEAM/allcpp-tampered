@@ -6,14 +6,14 @@
         <q-item-label caption>{{ ticketType.price }} 元</q-item-label>
       </q-item-section>
       <q-item-section side>
-        <q-checkbox color="primary" label="购买" v-model="" />
+        <q-checkbox color="primary" label="购买" v-model="ticketType.value" />
       </q-item-section>
     </q-item>
   </q-list>
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive } from 'vue';
 
 const ticketTypeList = reactive(null);
 
