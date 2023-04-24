@@ -2,7 +2,7 @@
 // @name        $PROJECT_NAME$
 // @description Auto buy CPP tickets for AllCPP conferences.
 // @namespace   https://github.com/ParticleG
-// @version     1.0.0
+// @version     1.1.0
 // @author      ParticleG <particle_g@outlook.com>
 // @icon        https://cp.allcpp.cn/favicon.ico
 // @updateURL   https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/main.user.js

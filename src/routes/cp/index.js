@@ -1,4 +1,4 @@
-import { Quasar } from 'quasar';
+import { Notify, Quasar } from 'quasar';
 import 'quasar/src/css/index.sass';
 import { createApp } from 'vue';
 
@@ -17,27 +17,28 @@ export default async () => {
     },
     await getElement('head')
   );
-  let injectNeighbor = await getElement('.sc-hTBuwn.gfpJHc');
-  let injectContainer = injectNeighbor.parentElement;
-  injectContainer.style.gap = '40px';
+  await getElement('.sc-idXgbr');
+  let injectContainer = (await getElement('.margin-top-nav')).parentElement;
+  injectContainer.style.gap = '20px';
   injectContainer.style.width = 'auto';
+  // noinspection JSCheckFunctionSignatures
   addElement(
     'div',
     null,
     {
       id: APP_ID,
       className: 'margin-top-nav',
-      style: [`height: ${injectContainer.offsetHeight}px`, 'width: 300px'].join(
-        '; '
-      ),
+      style: [`height: calc(100vh - 105px)`, 'width: 300px'].join('; '),
     },
     injectContainer,
-    injectNeighbor
+    injectContainer.firstChild
   );
   const myApp = createApp(App);
   myApp.use(Quasar, {
-    config: {},
-    plugins: {},
+    config: {
+      notify: {},
+    },
+    plugins: { Notify },
   });
   myApp.mount(`#${APP_ID}`);
 };

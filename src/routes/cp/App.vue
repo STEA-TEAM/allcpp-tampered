@@ -18,20 +18,20 @@
       <!-- drawer content -->
     </q-drawer>
     <q-page-container>
-
+      <main-page />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import MainPage from './pages/MainPage.vue';
 
 const leftDrawerOpen = ref(false);
 
 const toggleLeftDrawer = () => {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 };
-
 </script>
 
 <style scoped></style>
