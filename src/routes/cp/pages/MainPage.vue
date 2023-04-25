@@ -37,7 +37,7 @@
             : dynamicBuyInterval >= 30
             ? 'amber'
             : dynamicBuyInterval >= 20
-            ? 'blue'
+            ? 'light-green'
             : 'green'
         "
         :max="250"
@@ -56,7 +56,7 @@
                 : dynamicBuyInterval >= 30
                 ? 'text-amber'
                 : dynamicBuyInterval >= 20
-                ? 'text-blue'
+                ? 'text-light-green'
                 : 'text-green'
             "
           >
@@ -102,6 +102,8 @@ const toggleBuyState = () => {
   if (buyInterval.value) {
     clearInterval(buyInterval.value);
     buyInterval.value = null;
+    dynamicBuyInterval.value = 25;
+    dynamicBuyCounter = 0;
   } else {
     buyInterval.value = setInterval(async () => {
       if (dynamicBuyInterval.value > 50) {
@@ -125,22 +127,32 @@ const toggleBuyState = () => {
           let errorMessage = 'Unknown Error';
           if (typeof err === 'object') {
             if (err.message !== undefined) {
-              if (err.message === '请求过于频繁！') {
-                dynamicBuyInterval.value += (50 - dynamicBuyInterval.value) / 15;
-              } else {
-                dynamicBuyInterval.value -= (dynamicBuyInterval.value) / 30;
-              }
               errorMessage = err.message;
+              if (err.message === '请求过于频繁！') {
+                const delay = (35 - dynamicBuyInterval.value) / 10;
+                if (delay > 0) {
+                  dynamicBuyInterval.value += delay;
+                }
+              } else {
+                const delay = (dynamicBuyInterval.value - 10) / 25;
+                dynamicBuyInterval.value -= delay > 0.1 ? delay : 0.1;
+              }
             } else if (err.statusText !== undefined) {
-              dynamicBuyInterval.value += (50 - dynamicBuyInterval.value) / 10;
               errorMessage = err.statusText;
+              const delay = (45 - dynamicBuyInterval.value) / 15;
+              if (delay > 0) {
+                dynamicBuyInterval.value += delay;
+              }
             }
           } else if (
             typeof err === 'string' &&
             err.includes('由于访问人数太多导致服务器压力过大，请您稍后再试。')
           ) {
-            dynamicBuyInterval.value += (50 - dynamicBuyInterval.value) / 20;
             errorMessage = '访问人数太多服务器压力过大！';
+            const delay = (30 - dynamicBuyInterval.value) / 15;
+            if (delay > 0) {
+              dynamicBuyInterval.value += delay;
+            }
           }
           if (errors.hasOwnProperty(errorMessage)) {
             errors[errorMessage] += 1;
