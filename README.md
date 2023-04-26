@@ -32,7 +32,7 @@
 
 | 正式版 (GhProxy 加速)                                                                                            | 正式版 (GitHub 源)                                                                          |
 |-------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| [安装](https://ghproxy.com/https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/main.user.js) | [安装](https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/main.user.js) |
+| [安装](https://ghproxy.com/https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/allcpp-evolved.user.js) | [安装](https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/allcpp-evolved.user.js) |
 
 # 功能
 
