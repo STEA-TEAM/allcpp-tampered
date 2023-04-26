@@ -79,6 +79,7 @@ function header(config: ProjectConfig, dev: boolean) {
       outputOptions: NormalizedOutputOptions,
       outputBundle: OutputBundle
     ) {
+      console.log(import.meta.url);
       const outputChunk = <OutputChunk>(
         outputBundle[String(outputOptions.name).replace('dist/', '')]
       );
