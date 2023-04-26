@@ -1,6 +1,6 @@
 <template>
   <q-input
-    v-if="!selected || !selected['validate']"
+    v-if="!selected || !selected.validate"
     v-model.number="ticketCount"
     :disable="!selected"
     label="购票数量"
@@ -28,19 +28,16 @@
   </q-input>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { computed } from 'vue';
+import { Ticket } from '@/components/models';
 
-const props = defineProps({
-  modelValue: {
-    type: Number,
-    required: true,
-  },
-  selected: {
-    type: Object,
-    required: true,
-  },
-});
+export interface Props {
+  modelValue: number;
+  selected?: Ticket;
+}
+
+const props = defineProps<Props>();
 
 const emit = defineEmits(['update:modelValue']);
 

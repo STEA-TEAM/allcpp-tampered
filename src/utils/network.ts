@@ -1,61 +1,47 @@
-import CryptoJS from 'crypto-js';
-import { v4 as uuid } from 'uuid';
+import CryptoJS from "crypto-js";
+import { v4 as uuid } from "uuid";
+import type { BuySuccess, ErrorResponse, LoadResponse, Purchaser, TicketType } from "@/components/models";
 
 declare function GM_xmlhttpRequest(details: {
   fetch?: boolean;
   method: string;
-  responseType: 'json' | 'text';
+  responseType:"json"' |"text"';
   url: string;
-  onload: (response: { response: any }) => void;
-  onerror: (error: any) => void;
+  onload: (res: LoadResponse) => void;
+  onerror: (error: ErrorResponse) => void;
 }): void;
 
-function o() {
-  for (
-    // eslint-disable-next-line prefer-rest-params,no-var
-    var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : 32,
-      t = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678',
-      n = t.length,
-      r = '',
-      a = 0;
-    a < e;
-    a++
-  )
-    r += t.charAt(Math.floor(Math.random() * n));
-  return r;
-}
-
-function getCrypto() {
-  // eslint-disable-next-line prefer-rest-params,prefer-const
-  let e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
-    t = 'MngwNTJBMEExdTIyMg==',
-    n = 'MnNGUnM=',
-    r,
-    // eslint-disable-next-line prefer-const
-    i = o();
-  try {
-    // @ts-ignore
-    r = Math.round(new Date() / 1e3);
-  } catch (c) {
-    r = Math.round(new Date().getTime() / 1e3);
-  }
-  t = atob(t);
-  n = atob(n);
-  return { nonce: i, timeStamp: r, sign: CryptoJS.MD5(t + r + i + e + n) };
+function getCrypto(ticketTypeId: number) {
+  const keyStart = atob("MngwNTJBMEExdTIyMg==");
+  const seconds = Math.round(new Date().getTime() / 1e3);
+  const randomStr = (() => {
+    const stringList = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
+    let result = "";
+    for (let a = 0; a < 32; a++) {
+      result += stringList.charAt(
+        Math.floor(Math.random() * stringList.length)
+      );
+    }
+    return result;
+  })();
+  const KeyEnd = atob("MnNGUnM=");
+  return {
+    nonce: randomStr,
+    timeStamp: seconds,
+    sign: CryptoJS.MD5(keyStart + seconds + randomStr + ticketTypeId + KeyEnd)
+  };
 }
 
 function htmlToElement(html: string) {
   const template = document.createElement('template');
-  html = html.trim(); // Never return a text node of whitespace as the result
-  template.innerHTML = html;
+  template.innerHTML = html.trim();
   return template.content.firstChild as HTMLElement;
 }
 
 const buyTicketAlipay = (ticketTypeId: number, purchaserIds: number[]) => {
-  // @ts-ignore
   const { nonce, timeStamp, sign } = getCrypto(ticketTypeId);
   const url =
-    `https://www.allcpp.cn/allcpp/ticket/buyTicketAlipay.do?` +
+    "https://www.allcpp.cn/allcpp/ticket/buyTicketAlipay.do?" +
     `ticketTypeId=${ticketTypeId}&` +
     `count=${purchaserIds.length}&` +
     `nonce=${nonce}&` +
@@ -69,12 +55,13 @@ const buyTicketAlipay = (ticketTypeId: number, purchaserIds: number[]) => {
       responseType: 'json',
       url: url,
       onload: ({ response }) => {
-        if (response.result && response.result.body) {
+        if ((<BuySuccess>response)?.result?.body) {
+          response = <BuySuccess>response;
           resolve(undefined);
           const form = htmlToElement(response.result.body);
           form.id = uuid();
           document.body.appendChild(form);
-          (document.getElementById(form.id) as HTMLFormElement)!.submit();
+          (document.getElementById(form.id) as HTMLFormElement)?.submit();
         } else {
           reject(response);
         }
@@ -95,10 +82,12 @@ const getPurchaserList = () => {
       url: 'https://www.allcpp.cn/allcpp/user/purchaser/getList.do',
       onload: ({ response }) => {
         resolve(
-          response.map((purchaser: { id: number; realname: string }) => ({
-            id: purchaser.id,
-            label: purchaser.realname,
-          }))
+          (<Purchaser[]>response).map(
+            (purchaser: { id: number; realname: string }) => ({
+              id: purchaser.id,
+              label: purchaser.realname
+            })
+          )
         );
       },
       onerror: (error) => {
@@ -117,21 +106,14 @@ const getTicketList = (eventMainId: number) => {
       url: `https://www.allcpp.cn/allcpp/ticket/getTicketTypeList.do?eventMainId=${eventMainId}`,
       onload: ({ response }) => {
         resolve(
-          response['ticketTypeList'].map(
-            (ticketType: {
-              id: number;
-              ticketName: string;
-              purchaseNum: number;
-              ticketPrice: number;
-              remainderNum: number;
-              realnameAuth: boolean;
-            }) => ({
+          (<{ ticketTypeList: TicketType[] }>response).ticketTypeList.map(
+            (ticketType: TicketType) => ({
               id: ticketType.id,
               name: ticketType.ticketName,
               limit: ticketType.purchaseNum,
               price: (ticketType.ticketPrice / 100).toFixed(2),
               remain: ticketType.remainderNum,
-              validate: ticketType.realnameAuth,
+              validate: ticketType.realnameAuth
             })
           )
         );

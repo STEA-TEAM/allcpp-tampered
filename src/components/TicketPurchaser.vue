@@ -1,8 +1,8 @@
 <template>
   <q-select
-    v-if="selected && selected['validate']"
+    v-if="selected && selected.validate"
     v-model="selectedPurchasers"
-    :max-values="selected['limit']"
+    :max-values="selected?.limit || 0"
     :options="options"
     counter
     dropdown-icon="expand_less"
@@ -16,23 +16,17 @@
   />
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { computed } from 'vue';
+import { Purchaser, Ticket } from '@/components/models';
 
-const props = defineProps({
-  modelValue: {
-    type: Array,
-    required: true,
-  },
-  options: {
-    type: Array,
-    required: true,
-  },
-  selected: {
-    type: Object,
-    required: true,
-  },
-});
+export interface Props {
+  modelValue: Purchaser[];
+  options: Purchaser[];
+  selected?: Ticket;
+}
+
+const props = defineProps<Props>();
 
 const emit = defineEmits(['update:modelValue']);
 

@@ -66,31 +66,33 @@
         </div>
       </q-circular-progress>
     </div>
-    <ErrorList v-model="errors" />
+    <ErrorList :model-value="errors" />
   </q-page>
 </template>
 
-<script setup>
-import { reactive, ref } from 'vue';
+<script lang="ts" setup>
+import { reactive, Ref, ref } from 'vue';
 
 import ErrorList from '@/components/ErrorList.vue';
 import TicketList from '@/components/TicketList.vue';
 import TicketCount from '@/components/TicketCount.vue';
 import TicketPurchaser from '@/components/TicketPurchaser.vue';
+import type { Purchaser, Ticket } from '@/components/models';
 
 import {
   buyTicketAlipay,
   getPurchaserList,
   getTicketList,
 } from '@/utils/network';
+import { getErrorMessage } from '@/utils/message';
 
 const tickets = reactive([]);
-const selectedTicket = ref(null);
+const selectedTicket: Ref<Ticket | undefined> = ref(undefined);
 
-const ticketCount = ref('1');
+const ticketCount = ref(1);
 
-const purchasers = reactive([]);
-const selectedPurchasers = ref([]);
+const purchasers: Purchaser[] = reactive([]);
+const selectedPurchasers: Ref<Purchaser[]> = ref([]);
 
 const buyInterval = ref(0);
 const dynamicBuyInterval = ref(25);
@@ -98,12 +100,16 @@ const errors = reactive({});
 
 let dynamicBuyCounter = 0;
 
+const resetInterval = () => {
+  clearInterval(buyInterval.value);
+  buyInterval.value = 0;
+  dynamicBuyCounter = 0;
+  dynamicBuyInterval.value = 25;
+};
+
 const toggleBuyState = () => {
   if (buyInterval.value) {
-    clearInterval(buyInterval.value);
-    buyInterval.value = null;
-    dynamicBuyInterval.value = 25;
-    dynamicBuyCounter = 0;
+    resetInterval();
   } else {
     buyInterval.value = setInterval(async () => {
       if (dynamicBuyInterval.value > 50) {
@@ -116,43 +122,41 @@ const toggleBuyState = () => {
         dynamicBuyCounter = 0;
       }
       buyTicketAlipay(
-        selectedTicket.value.id,
-        purchasers.map((purchaser) => purchaser['id'])
+        <number>selectedTicket.value?.id,
+        purchasers.map((purchaser) => purchaser.id)
       )
-        .then(() => {
-          clearInterval(buyInterval.value);
-          buyInterval.value = null;
-        })
+        .then(() => resetInterval())
         .catch((err) => {
-          let errorMessage = 'Unknown Error';
-          if (typeof err === 'object') {
-            if (err.message !== undefined) {
-              errorMessage = err.message;
-              if (err.message === '请求过于频繁！') {
-                const delay = (35 - dynamicBuyInterval.value) / 10;
-                if (delay > 0) {
-                  dynamicBuyInterval.value += delay;
-                }
-              } else {
-                const delay = (dynamicBuyInterval.value - 10) / 25;
-                dynamicBuyInterval.value -= delay > 0.1 ? delay : 0.1;
-              }
-            } else if (err.statusText !== undefined) {
-              errorMessage = err.statusText;
-              const delay = (45 - dynamicBuyInterval.value) / 15;
+          const errorMessage = getErrorMessage(err);
+          let delay = (dynamicBuyInterval.value - 10) / 25;
+          switch (errorMessage) {
+            case '请求过于频繁！':
+              delay = (35 - dynamicBuyInterval.value) / 10;
               if (delay > 0) {
                 dynamicBuyInterval.value += delay;
               }
-            }
-          } else if (
-            typeof err === 'string' &&
-            err.includes('由于访问人数太多导致服务器压力过大，请您稍后再试。')
-          ) {
-            errorMessage = '访问人数太多服务器压力过大！';
-            const delay = (30 - dynamicBuyInterval.value) / 15;
-            if (delay > 0) {
-              dynamicBuyInterval.value += delay;
-            }
+              break;
+            case '系统繁忙，请稍后再试':
+              delay = (30 - dynamicBuyInterval.value) / 15;
+              if (delay > 0) {
+                dynamicBuyInterval.value += delay;
+              }
+              break;
+            case '服务器压力过大，请您稍后再试。':
+              delay = (30 - dynamicBuyInterval.value) / 15;
+              if (delay > 0) {
+                dynamicBuyInterval.value += delay;
+              }
+              break;
+            case '请求失败':
+              delay = (45 - dynamicBuyInterval.value) / 15;
+              if (delay > 0) {
+                dynamicBuyInterval.value += delay;
+              }
+              break;
+            default:
+              dynamicBuyInterval.value -= delay > 0.1 ? delay : 0.1;
+              break;
           }
           if (errors[errorMessage]) {
             errors[errorMessage] += 1;

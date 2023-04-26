@@ -22,19 +22,16 @@
   </q-list>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { computed } from 'vue';
+import type { Ticket } from '@/components/models';
 
-const props = defineProps({
-  modelValue: {
-    type: Object,
-    required: true,
-  },
-  options: {
-    type: Array,
-    required: true,
-  },
-});
+export interface Props {
+  modelValue: Ticket;
+  options: Ticket[];
+}
+
+const props = defineProps<Props>();
 
 const emit = defineEmits(['update:modelValue']);
 

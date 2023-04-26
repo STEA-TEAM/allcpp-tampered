@@ -16,6 +16,7 @@ export const routes = [
         },
         prepare: async (injectId: string) => {
           await getElement('.sc-idXgbr');
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           const injectContainer = (await getElement('.margin-top-nav'))
             .parentElement!;
           injectContainer.style.gap = '20px';
@@ -26,7 +27,7 @@ export const routes = [
             {
               id: injectId,
               className: 'margin-top-nav',
-              style: [`height: calc(100vh - 385px)`, 'width: 300px'].join('; '),
+              style: ['height: calc(100vh - 105px)', 'width: 300px'].join('; '),
             },
             injectContainer,
             injectContainer.firstChild as HTMLElement
