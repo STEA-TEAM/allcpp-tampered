@@ -1,18 +1,13 @@
-import { paramCase } from 'change-case';
-import fs from 'fs';
-import { fileURLToPath, URL } from 'node:url';
-import path from 'path';
-import type {
-  NormalizedOutputOptions,
-  OutputBundle,
-  OutputChunk,
-} from 'rollup';
-// import postcss from 'rollup-plugin-postcss'
-import { defineConfig } from 'vite';
-import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
-import vue from '@vitejs/plugin-vue';
+import { paramCase } from "change-case";
+import fs from "fs";
+import { fileURLToPath, URL } from "node:url";
+import path from "path";
+import type { NormalizedOutputOptions, OutputBundle, OutputChunk } from "rollup";
+import { defineConfig } from "vite";
+import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
+import vue from "@vitejs/plugin-vue";
 
-import type { ProjectConfig } from './env';
+import type { ProjectConfig } from "./env";
 
 const config = JSON.parse(fs.readFileSync('./src/config.json').toString());
 const packageJson = JSON.parse(fs.readFileSync('./package.json').toString());
@@ -53,16 +48,14 @@ export default defineConfig(({ mode }) => ({
     'process.env.NODE_ENV': JSON.stringify(mode),
   },
   plugins: [
+    postcss({}),
     quasar({
-      sassVariables: 'src/quasar-variables.sass',
+      sassVariables:"src/assets/quasar-variables.scss",
     }),
     vue({
-      template: { transformAssetUrls },
+      template: { transformAssetUrls ,
     }),
-    // externalGlobals({
-    //   vue: 'Vue'
-    // }),
-    header(config, mode === 'development'),
+    header(config, mode ==="development"',
   ],
   resolve: {
     alias: {
