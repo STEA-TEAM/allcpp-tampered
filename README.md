@@ -1,5 +1,5 @@
 <br/>
-<div align="center">
+<div style="text-align: center;">
 
 「 无差别同人站（ALLCPP）增强脚本 」
 
