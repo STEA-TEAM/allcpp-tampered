@@ -7,12 +7,12 @@ import type {
   OutputBundle,
   OutputChunk,
 } from 'rollup';
+import sass from 'rollup-plugin-sass';
 import { defineConfig } from 'vite';
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
 import type { ProjectConfig } from './env';
-import scss from 'rollup-plugin-scss';
 
 const config = JSON.parse(readFileSync('./src/config.json').toString());
 const packageJson = JSON.parse(readFileSync('./package.json').toString());
@@ -36,12 +36,15 @@ config.downloadURL = config.downloadURL ?? config.updateURL;
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   build: {
+    cssCodeSplit: true,
+    cssMinify: true,
     lib: {
       entry: './src/main.ts',
       fileName: () => FILE_NAME,
       formats: ['iife'],
       name: FILE_NAME,
     },
+    minify: true,
     watch:
       mode === 'development'
         ? {
@@ -53,14 +56,14 @@ export default defineConfig(({ mode }) => ({
     'process.env.NODE_ENV': JSON.stringify(mode),
   },
   plugins: [
-    quasar({
-      sassVariables:"src/assets/quasar-variables.scss",
-    }),
-    scss({}),
     vue({
       template: { transformAssetUrls },
     }),
-    header(config, mode ==="development"),
+    quasar({
+      sassVariables: 'src/assets/quasar-variables.scss',
+    }),
+    sass({ options: { indentedSyntax: false, outputStyle: 'compressed' } }),
+    header(config, mode === 'development'),
   ],
   resolve: {
     alias: {
@@ -86,15 +89,13 @@ function header(config: ProjectConfig, dev: boolean) {
         if (config.require === undefined) {
           config.require = [];
         }
-        config.require.push(
-          `file:///${join(__dirname, "/dist/" + FILE_NAME)}`
-        );
+        config.require.push(`file:///${join(__dirname, '/dist/' + FILE_NAME)}`);
         const parsedConfig = parseConfig(config);
         if (!existsSync('dist')) {
           mkdirSync('dist');
         }
         writeFileSync(
-          join(__dirname, "/dist/" + FILE_NAME.replace(".js", ".dev.js")),
+          join(__dirname, '/dist/' + FILE_NAME.replace('.js', '.dev.js')),
           parsedConfig + outputChunk.code
         );
         console.info('\nPut following code in your tampermonkey script: \n');

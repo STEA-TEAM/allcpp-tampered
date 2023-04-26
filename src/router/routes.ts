@@ -8,7 +8,7 @@ export const routes = [
     children: [
       {
         name: 'detail',
-        path: '/detail',
+        path: 'detail',
         components: {
           default: () => import('@/pages/DetailPage.vue'),
           drawer: () => import('@/layouts/drawers/DetailDrawer.vue'),
