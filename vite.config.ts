@@ -1,17 +1,21 @@
-import { paramCase } from "change-case";
-import fs from "fs";
-import { fileURLToPath, URL } from "node:url";
-import { join } from "path";
-import type { NormalizedOutputOptions, OutputBundle, OutputChunk } from "rollup";
-import { defineConfig } from "vite";
-import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
-import vue from "@vitejs/plugin-vue";
+import { paramCase } from 'change-case';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { fileURLToPath, URL } from 'node:url';
+import { join } from 'path';
+import type {
+  NormalizedOutputOptions,
+  OutputBundle,
+  OutputChunk,
+} from 'rollup';
+import { defineConfig } from 'vite';
+import { quasar } from '@quasar/vite-plugin';
+import vue from '@vitejs/plugin-vue';
 
-import type { ProjectConfig } from "./env";
-import scss from "rollup-plugin-scss";
+import type { ProjectConfig } from './env';
+import scss from 'rollup-plugin-scss';
 
-const config = JSON.parse(fs.readFileSync('./src/config.json').toString());
-const packageJson = JSON.parse(fs.readFileSync('./package.json').toString());
+const config = JSON.parse(readFileSync('./src/config.json').toString());
+const packageJson = JSON.parse(readFileSync('./package.json').toString());
 
 config.name = config.name ?? packageJson.name ?? 'Tamper Vite';
 
@@ -50,13 +54,13 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     quasar({
-      sassVariables:"src/assets/quasar-variables.scss",
+      sassVariables: 'src/assets/quasar-variable.scss',
     }),
     scss({}),
     vue({
-      template: { transformAssetUrls ,
+      template: { transformAsseUrls },
     }),
-    header(config, mode ==="development"',
+    header(config, mode === 'develoment'),
   ],
   resolve: {
     alias: {
@@ -82,15 +86,13 @@ function header(config: ProjectConfig, dev: boolean) {
         if (config.require === undefined) {
           config.require = [];
         }
-        config.require.push(
-          `file:///${join(__dirname, "/dist/" + FILE_NAME)}`
-        );
+        config.require.push(`file:///${join(__dirname, '/dist/' + FILE_NAME)}`);
         const parsedConfig = parseConfig(config);
-        if (!fs.existsSync('dist')) {
-          fs.mkdirSync('dist');
+        if (!existsSync('dist')) {
+          mkdirSync('dist');
         }
-        fs.writeFileSync(
-          join(__dirname, "/dist/" + FILE_NAME.replace(".js", ".dev.js")),
+        writeFileSync(
+          join(__dirname, '/dist/' + FILE_NAME.replace('.js', '.dev.js')),
           parsedConfig + outputChunk.code
         );
         console.info('\nPut following code in your tampermonkey script: \n');
