@@ -11,8 +11,7 @@
   },
   "scripts": {
     "dev": "vite build -m development",
-    "build": "run -p type-check build-only",
-    "build-only": "vite build -m production",
+    "build": "vite build -m production",
     "format": "prettier --write src/",
     "lint": "eslint . --ext .vue,.js,.cjs,.mjs,.ts,.cts,.mts --fix --ignore-path .gitignore",
     "type-check": "vue-tsc --noEmit"
