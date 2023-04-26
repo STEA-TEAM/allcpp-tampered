@@ -8,7 +8,7 @@ import type {
   OutputChunk,
 } from 'rollup';
 import { defineConfig } from 'vite';
-import { quasar } from '@quasar/vite-plugin';
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
 import type { ProjectConfig } from './env';
@@ -54,13 +54,13 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     quasar({
-      sassVariables: 'src/assets/quasar-variable.scss',
+      sassVariables:"src/assets/quasar-variables.scss",
     }),
     scss({}),
     vue({
-      template: { transformAsseUrls },
+      template: { transformAssetUrls },
     }),
-    header(config, mode === 'develoment'),
+    header(config, mode ==="development"),
   ],
   resolve: {
     alias: {
@@ -86,13 +86,15 @@ function header(config: ProjectConfig, dev: boolean) {
         if (config.require === undefined) {
           config.require = [];
         }
-        config.require.push(`file:///${join(__dirname, '/dist/' + FILE_NAME)}`);
+        config.require.push(
+          `file:///${join(__dirname, "/dist/" + FILE_NAME)}`
+        );
         const parsedConfig = parseConfig(config);
         if (!existsSync('dist')) {
           mkdirSync('dist');
         }
         writeFileSync(
-          join(__dirname, '/dist/' + FILE_NAME.replace('.js', '.dev.js')),
+          join(__dirname, "/dist/" + FILE_NAME.replace(".js", ".dev.js")),
           parsedConfig + outputChunk.code
         );
         console.info('\nPut following code in your tampermonkey script: \n');
