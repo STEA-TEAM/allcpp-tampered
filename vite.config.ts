@@ -65,6 +65,7 @@ config.updateURL =
 config.downloadURL = config.downloadURL ?? config.updateURL;
 
 // https://vitejs.dev/config/
+// noinspection JSUnusedGlobalSymbols
 export default defineConfig(({ mode }) => ({
   build: {
     cssCodeSplit: true,
@@ -104,6 +105,7 @@ export default defineConfig(({ mode }) => ({
 }));
 
 function header(config: ProjectConfig, dev: boolean) {
+  // noinspection JSUnusedGlobalSymbols
   return {
     name: 'vite-plugin-header',
     generateBundle(

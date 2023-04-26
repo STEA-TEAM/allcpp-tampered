@@ -6,6 +6,7 @@ export interface Purchaser {
   validType: number;
 }
 
+// noinspection JSUnusedGlobalSymbols
 export interface TicketMain {
   id: number;
   name: string;

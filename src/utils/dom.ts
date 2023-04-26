@@ -37,6 +37,7 @@ const getElement = async (selector: string) => {
   return element;
 };
 
+// noinspection JSUnusedGlobalSymbols
 const getElementAll = async (selector: string) => {
   let elements = document.querySelectorAll(selector);
   while (elements.length === 0) {
