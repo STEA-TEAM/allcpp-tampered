@@ -1,4 +1,4 @@
-import { sleep } from "@/utils/common";
+import { sleep } from '@/utils/common';
 
 /**
  * 向指定 父元素 中添加 子元素

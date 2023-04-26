@@ -1,22 +1,28 @@
-import CryptoJS from "crypto-js";
-import { v4 as uuid } from "uuid";
-import type { BuySuccess, ErrorResponse, LoadResponse, Purchaser, TicketType } from "@/components/models";
+import CryptoJS from 'crypto-js';
+import { v4 as uuid } from 'uuid';
+import type {
+  BuySuccess,
+  ErrorResponse,
+  LoadResponse,
+  Purchaser,
+  TicketType,
+} from '@/components/models';
 
 declare function GM_xmlhttpRequest(details: {
   fetch?: boolean;
   method: string;
-  responseType:"json"' |"text"';
+  responseType: 'json' | 'text';
   url: string;
   onload: (res: LoadResponse) => void;
   onerror: (error: ErrorResponse) => void;
 }): void;
 
 function getCrypto(ticketTypeId: number) {
-  const keyStart = atob("MngwNTJBMEExdTIyMg==");
+  const keyStart = atob('MngwNTJBMEExdTIyMg==');
   const seconds = Math.round(new Date().getTime() / 1e3);
   const randomStr = (() => {
-    const stringList = "ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678";
-    let result = "";
+    const stringList = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    let result = '';
     for (let a = 0; a < 32; a++) {
       result += stringList.charAt(
         Math.floor(Math.random() * stringList.length)
@@ -24,11 +30,11 @@ function getCrypto(ticketTypeId: number) {
     }
     return result;
   })();
-  const KeyEnd = atob("MnNGUnM=");
+  const KeyEnd = atob('MnNGUnM=');
   return {
     nonce: randomStr,
     timeStamp: seconds,
-    sign: CryptoJS.MD5(keyStart + seconds + randomStr + ticketTypeId + KeyEnd)
+    sign: CryptoJS.MD5(keyStart + seconds + randomStr + ticketTypeId + KeyEnd),
   };
 }
 
@@ -41,7 +47,7 @@ function htmlToElement(html: string) {
 const buyTicketAlipay = (ticketTypeId: number, purchaserIds: number[]) => {
   const { nonce, timeStamp, sign } = getCrypto(ticketTypeId);
   const url =
-    "https://www.allcpp.cn/allcpp/ticket/buyTicketAlipay.do?" +
+    'https://www.allcpp.cn/allcpp/ticket/buyTicketAlipay.do?' +
     `ticketTypeId=${ticketTypeId}&` +
     `count=${purchaserIds.length}&` +
     `nonce=${nonce}&` +
@@ -85,7 +91,7 @@ const getPurchaserList = () => {
           (<Purchaser[]>response).map(
             (purchaser: { id: number; realname: string }) => ({
               id: purchaser.id,
-              label: purchaser.realname
+              label: purchaser.realname,
             })
           )
         );
@@ -113,7 +119,7 @@ const getTicketList = (eventMainId: number) => {
               limit: ticketType.purchaseNum,
               price: (ticketType.ticketPrice / 100).toFixed(2),
               remain: ticketType.remainderNum,
-              validate: ticketType.realnameAuth
+              validate: ticketType.realnameAuth,
             })
           )
         );
