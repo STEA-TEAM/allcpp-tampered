@@ -12,7 +12,38 @@ import { defineConfig } from 'vite';
 import { quasar, transformAssetUrls } from '@quasar/vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
-import type { ProjectConfig } from './env';
+interface ProjectConfig {
+  name?: string;
+  namespace?: string;
+  copyright?: string;
+  version?: string;
+  description?: string;
+  icon?: string;
+  icon64?: string;
+  grant?: string[];
+  author?: string;
+  homepage?: string;
+  antifeature?: string[];
+  require?: string[];
+  resource?: string[];
+  include?: string[];
+  match?: string[];
+  exclude?: string[];
+  'run-at'?:
+    | 'document-start'
+    | 'document-body'
+    | 'document-end'
+    | 'document-idle'
+    | 'context-menu';
+  sandbox?: 'raw' | 'javascript' | 'DOM';
+  connect?: string[];
+  noframes?: boolean;
+  updateURL?: string;
+  downloadURL?: string;
+  supportURL?: string;
+  webRequest?: JSON;
+  unwrap?: boolean;
+}
 
 const config = JSON.parse(readFileSync('./src/config.json').toString());
 const packageJson = JSON.parse(readFileSync('./package.json').toString());
@@ -107,7 +138,7 @@ function header(config: ProjectConfig, dev: boolean) {
 }
 
 function parseConfig(config: ProjectConfig) {
-  let result = `// ==UserScript==\n`;
+  let result = '// ==UserScript==\n';
   for (const [key, value] of Object.entries(config)) {
     if (value) {
       if (Array.isArray(value)) {
@@ -121,6 +152,6 @@ function parseConfig(config: ProjectConfig) {
       }
     }
   }
-  result += `// ==/UserScript==\n`;
+  result += '// ==/UserScript==\n';
   return result;
 }
