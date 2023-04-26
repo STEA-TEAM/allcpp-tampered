@@ -1,13 +1,14 @@
 import { paramCase } from "change-case";
 import fs from "fs";
 import { fileURLToPath, URL } from "node:url";
-import path from "path";
+import { join } from "path";
 import type { NormalizedOutputOptions, OutputBundle, OutputChunk } from "rollup";
 import { defineConfig } from "vite";
 import { quasar, transformAssetUrls } from "@quasar/vite-plugin";
 import vue from "@vitejs/plugin-vue";
 
 import type { ProjectConfig } from "./env";
+import scss from "rollup-plugin-scss";
 
 const config = JSON.parse(fs.readFileSync('./src/config.json').toString());
 const packageJson = JSON.parse(fs.readFileSync('./package.json').toString());
@@ -48,10 +49,10 @@ export default defineConfig(({ mode }) => ({
     'process.env.NODE_ENV': JSON.stringify(mode),
   },
   plugins: [
-    postcss({}),
     quasar({
       sassVariables:"src/assets/quasar-variables.scss",
     }),
+    scss({}),
     vue({
       template: { transformAssetUrls ,
     }),
@@ -82,14 +83,14 @@ function header(config: ProjectConfig, dev: boolean) {
           config.require = [];
         }
         config.require.push(
-          `file:///${path.join(__dirname, '/dist/' + FILE_NAME)}`
+          `file:///${join(__dirname, "/dist/" + FILE_NAME)}`
         );
         const parsedConfig = parseConfig(config);
         if (!fs.existsSync('dist')) {
           fs.mkdirSync('dist');
         }
         fs.writeFileSync(
-          path.join(__dirname, '/dist/' + FILE_NAME.replace('.js', '.dev.js')),
+          join(__dirname, "/dist/" + FILE_NAME.replace(".js", ".dev.js")),
           parsedConfig + outputChunk.code
         );
         console.info('\nPut following code in your tampermonkey script: \n');
