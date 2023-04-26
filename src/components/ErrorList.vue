@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   modelValue: {
     type: Object,
     required: true,

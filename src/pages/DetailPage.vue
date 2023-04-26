@@ -8,9 +8,9 @@
         <q-spinner color="grey" size="24px" />
       </div>
     </div>
-    <ticket-list v-model="selectedTicket" :options="tickets" />
-    <ticket-count v-model="ticketCount" :selected="selectedTicket" />
-    <ticket-purchaser
+    <TicketList v-model="selectedTicket" :options="tickets" />
+    <TicketCount v-model="ticketCount" :selected="selectedTicket" />
+    <TicketPurchaser
       v-model="selectedPurchasers"
       :options="purchasers"
       :selected="selectedTicket"
@@ -66,23 +66,23 @@
         </div>
       </q-circular-progress>
     </div>
-    <error-list v-model="errors" />
+    <ErrorList v-model="errors" />
   </q-page>
 </template>
 
 <script setup>
-import { useQuasar } from 'quasar';
 import { reactive, ref } from 'vue';
 
-import TicketList from '../components/TicketList.vue';
-import TicketCount from '../components/TicketCount.vue';
-import TicketPurchaser from '../components/TicketPurchaser.vue';
+import ErrorList from '@/components/ErrorList.vue';
+import TicketList from '@/components/TicketList.vue';
+import TicketCount from '@/components/TicketCount.vue';
+import TicketPurchaser from '@/components/TicketPurchaser.vue';
 
-import { getPurchaserList, getTicketList } from '../utils/network';
-import { buyTicketAlipay } from '../utils/buy';
-import ErrorList from '../components/ErrorList.vue';
-
-const { notify } = useQuasar();
+import {
+  buyTicketAlipay,
+  getPurchaserList,
+  getTicketList,
+} from '@/utils/network';
 
 const tickets = reactive([]);
 const selectedTicket = ref(null);
@@ -92,7 +92,7 @@ const ticketCount = ref('1');
 const purchasers = reactive([]);
 const selectedPurchasers = ref([]);
 
-const buyInterval = ref(null);
+const buyInterval = ref(0);
 const dynamicBuyInterval = ref(25);
 const errors = reactive({});
 
@@ -154,7 +154,7 @@ const toggleBuyState = () => {
               dynamicBuyInterval.value += delay;
             }
           }
-          if (errors.hasOwnProperty(errorMessage)) {
+          if (errors[errorMessage]) {
             errors[errorMessage] += 1;
           } else {
             errors[errorMessage] = 1;
