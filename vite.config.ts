@@ -53,14 +53,14 @@ const FILE_NAME = `${packageJson.name}.user.js`;
 export default defineConfig(({ mode }) => ({
   build: {
     cssCodeSplit: true,
-    cssMinify: true,
+    cssMinify: mode !== 'development',
     lib: {
       entry: './src/main.ts',
       fileName: () => FILE_NAME,
       formats: ['iife'],
       name: FILE_NAME,
     },
-    minify: true,
+    minify: mode !== 'development',
     watch:
       mode === 'development'
         ? {

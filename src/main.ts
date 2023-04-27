@@ -1,10 +1,12 @@
 import {
   CategoryScale,
   Chart,
+  Legend,
   LinearScale,
-  LineController,
   LineElement,
   PointElement,
+  Title,
+  Tooltip,
 } from 'chart.js';
 import { Dialog, Notify, Quasar } from 'quasar';
 import 'quasar/src/css/index.sass';
@@ -20,11 +22,13 @@ import router from '@/router';
 const injectId = '__tamper_vite__';
 
 Chart.register(
-  LineController,
   LineElement,
   PointElement,
   CategoryScale,
-  LinearScale
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
 );
 
 const pinia = createPinia();

@@ -1,7 +1,18 @@
 <template>
-  <q-drawer :width="300" behavior="desktop" bordered overlay side="left">
-    <Line :data="chartData" :options="chartOptions" />
-    <q-list>
+  <q-drawer
+    class="column overflow-hidden"
+    behavior="desktop"
+    bordered
+    overlay
+    side="left"
+    :width="500"
+  >
+    <div class="col-4 column items-center q-mx-lg q-my-sm">
+      <DelayChart />
+    </div>
+    <DelayConfigurator/>
+    <q-space />
+    <q-list bordered separator>
       <q-item v-ripple clickable @click="clearSettings">
         <q-item-section>
           <q-item-label>重置配置数据</q-item-label>
@@ -16,34 +27,12 @@
 
 <script lang="ts" setup>
 import { useQuasar } from 'quasar';
-import { Line } from 'vue-chartjs';
 
-import { useSettingsStore } from '@/stores/ticket';
+import DelayChart from '@/components/DelayChart.vue';
 import { gm_storage } from '@/utils/storage';
-import { computed } from 'vue';
+import DelayConfigurator from '@/components/DelayConfigurator.vue';
 
 const { dialog, notify } = useQuasar();
-const { delayFunctions, getDelay } = useSettingsStore();
-
-const chartData = computed(() => {
-  const start = 0;
-  const end = 50;
-  const datasets = [];
-  console.log(delayFunctions);
-  for (const name in delayFunctions) {
-    datasets.push({
-      label: name,
-      data: [getDelay(name, start), getDelay(name, end)],
-    });
-  }
-  return {
-    labels: [start, end * 5],
-    datasets,
-  };
-});
-const chartOptions = {
-  responsive: true,
-};
 
 const clearSettings = () => {
   dialog({

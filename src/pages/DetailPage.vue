@@ -87,8 +87,8 @@ import {
 } from '@/utils/network';
 import { getErrorMessage } from '@/utils/message';
 
-const { delayFunctions } = useSettingsStore();
-console.log(delayFunctions.default);
+const { getDelay } = useSettingsStore();
+console.log(getDelay('默认', 25));
 
 const tickets = reactive([]);
 const selectedTicket: Ref<Ticket | undefined> = ref(undefined);
