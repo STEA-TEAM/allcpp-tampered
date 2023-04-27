@@ -2,7 +2,13 @@
   "name": "ALLCPP Evolved",
   "namespace": "https://github.com/ParticleG",
   "icon": "https://cp.allcpp.cn/favicon.ico",
-  "grant": ["GM_xmlhttpRequest"],
+  "grant": [
+    "GM_deleteValue",
+    "GM_getValue",
+    "GM_listValues",
+    "GM_setValue",
+    "GM_xmlhttpRequest"
+  ],
   "match": ["*://*.allcpp.cn/*"],
   "connect": ["allcpp.cn"]
 }

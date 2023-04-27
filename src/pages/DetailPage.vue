@@ -79,12 +79,16 @@ import TicketCount from '@/components/TicketCount.vue';
 import TicketPurchaser from '@/components/TicketPurchaser.vue';
 import type { Purchaser, Ticket } from '@/components/models';
 
+import { useSettingsStore } from '@/stores/ticket';
 import {
   buyTicketAlipay,
   getPurchaserList,
   getTicketList,
 } from '@/utils/network';
 import { getErrorMessage } from '@/utils/message';
+
+const { delayFunctions } = useSettingsStore();
+console.log(delayFunctions.default);
 
 const tickets = reactive([]);
 const selectedTicket: Ref<Ticket | undefined> = ref(undefined);
@@ -137,19 +141,19 @@ const toggleBuyState = () => {
               }
               break;
             case '服务器压力过大，请您稍后再试。':
-              delay = (30 - dynamicBuyInterval.value) / 15;
+              delay = (25 - dynamicBuyInterval.value) / 15;
               if (delay > 0) {
                 dynamicBuyInterval.value += delay;
               }
               break;
             case '请求过于频繁！':
-              delay = (35 - dynamicBuyInterval.value) / 10;
+              delay = (30 - dynamicBuyInterval.value) / 10;
               if (delay > 0) {
                 dynamicBuyInterval.value += delay;
               }
               break;
             case '请求失败':
-              delay = (45 - dynamicBuyInterval.value) / 15;
+              delay = (40 - dynamicBuyInterval.value) / 15;
               if (delay > 0) {
                 dynamicBuyInterval.value += delay;
               }

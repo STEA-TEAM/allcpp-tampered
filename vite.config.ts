@@ -1,4 +1,3 @@
-import { paramCase } from 'change-case';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { fileURLToPath, URL } from 'node:url';
 import { join } from 'path';
@@ -45,24 +44,9 @@ interface ProjectConfig {
   unwrap?: boolean;
 }
 
-const config = JSON.parse(readFileSync('./src/config.json').toString());
 const packageJson = JSON.parse(readFileSync('./package.json').toString());
 
-config.name = config.name ?? packageJson.name ?? 'Tamper Vite';
-
-const FILE_NAME = `${paramCase(config.name)}.user.js`;
-
-config.copyright =
-  config.copyright ?? `License: ${packageJson.license ?? 'None'}`;
-config.version = config.version ?? packageJson.version;
-config.description = config.description ?? packageJson.description;
-config.author = config.author ?? packageJson.author;
-config.homepage = config.homepage ?? packageJson.homepage;
-config['run-at'] = config['run-at'] ?? 'document-start';
-config.updateURL =
-  config.updateURL ??
-  `${packageJson.repository.url}/releases/latest/download/${FILE_NAME}`;
-config.downloadURL = config.downloadURL ?? config.updateURL;
+const FILE_NAME = `${packageJson.name}.user.js`;
 
 // https://vitejs.dev/config/
 // noinspection JSUnusedGlobalSymbols
@@ -95,7 +79,7 @@ export default defineConfig(({ mode }) => ({
       sassVariables: 'src/assets/quasar-variables.scss',
     }),
     sass({ options: { indentedSyntax: false, outputStyle: 'compressed' } }),
-    header(config, mode === 'development'),
+    header(mode === 'development'),
   ],
   resolve: {
     alias: {
@@ -104,7 +88,7 @@ export default defineConfig(({ mode }) => ({
   },
 }));
 
-function header(config: ProjectConfig, dev: boolean) {
+function header(dev: boolean) {
   // noinspection JSUnusedGlobalSymbols
   return {
     name: 'vite-plugin-header',
@@ -112,7 +96,20 @@ function header(config: ProjectConfig, dev: boolean) {
       outputOptions: NormalizedOutputOptions,
       outputBundle: OutputBundle
     ) {
-      console.log(import.meta.url);
+      const config = JSON.parse(readFileSync('./src/config.json').toString());
+      config.name = config.name ?? packageJson.name ?? 'Tamper Vite';
+      config.copyright =
+        config.copyright ?? `License: ${packageJson.license ?? 'None'}`;
+      config.version = config.version ?? packageJson.version;
+      config.description = config.description ?? packageJson.description;
+      config.author = config.author ?? packageJson.author;
+      config.homepage = config.homepage ?? packageJson.homepage;
+      config['run-at'] = config['run-at'] ?? 'document-start';
+      config.updateURL =
+        config.updateURL ??
+        `${packageJson.repository.url}/releases/latest/download/${FILE_NAME}`;
+      config.downloadURL = config.downloadURL ?? config.updateURL;
+
       const outputChunk = <OutputChunk>(
         outputBundle[String(outputOptions.name).replace('dist/', '')]
       );
