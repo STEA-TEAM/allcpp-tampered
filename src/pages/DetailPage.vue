@@ -130,20 +130,20 @@ const toggleBuyState = () => {
           const errorMessage = getErrorMessage(err);
           let delay = (dynamicBuyInterval.value - 10) / 25;
           switch (errorMessage) {
-            case '请求过于频繁！':
-              delay = (35 - dynamicBuyInterval.value) / 10;
-              if (delay > 0) {
-                dynamicBuyInterval.value += delay;
-              }
-              break;
             case '系统繁忙，请稍后再试':
-              delay = (30 - dynamicBuyInterval.value) / 15;
+              delay = (30 - dynamicBuyInterval.value) / 20;
               if (delay > 0) {
                 dynamicBuyInterval.value += delay;
               }
               break;
             case '服务器压力过大，请您稍后再试。':
               delay = (30 - dynamicBuyInterval.value) / 15;
+              if (delay > 0) {
+                dynamicBuyInterval.value += delay;
+              }
+              break;
+            case '请求过于频繁！':
+              delay = (35 - dynamicBuyInterval.value) / 10;
               if (delay > 0) {
                 dynamicBuyInterval.value += delay;
               }
