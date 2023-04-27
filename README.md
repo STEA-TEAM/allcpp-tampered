@@ -1,11 +1,6 @@
-<br/>
-<div style="text-align: center;">
+# 「 无差别同人站（ALLCPP）增强脚本 」
 
-「 无差别同人站（ALLCPP）增强脚本 」
-
-[![Build](https://github.com/STEA-TEAM/allcpp-evolved/actions/workflows/main.yaml/badge.svg?event=push)](https://github.com/STEA-TEAM/allcpp-evolved/actions/workflows/main.yaml) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/STEA-TEAM/allcpp-evolved) ![GitHub all releases](https://img.shields.io/github/downloads/STEA-TEAM/allcpp-evolved/total)
-
-</div>
+[![Build](https://github.com/STEA-TEAM/allcpp-evolved/actions/workflows/main.yml/badge.svg)](https://github.com/STEA-TEAM/allcpp-evolved/actions/workflows/main.yml) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/STEA-TEAM/allcpp-evolved) ![GitHub all releases](https://img.shields.io/github/downloads/STEA-TEAM/allcpp-evolved/total)
 
 [📦 安装](#安装)
 
