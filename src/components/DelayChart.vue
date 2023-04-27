@@ -1,9 +1,5 @@
 <template>
-  <Line
-    :data="chartData"
-    :options="chartOptions"
-    style="position: relative"
-  />
+  <Line :data="chartData" :options="chartOptions" style="position: relative" />
 </template>
 
 <script lang="ts" setup>

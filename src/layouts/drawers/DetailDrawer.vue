@@ -10,7 +10,7 @@
     <div class="col-4 column items-center q-mx-lg q-my-sm">
       <DelayChart />
     </div>
-    <DelayConfigurator/>
+    <DelayConfigurator />
     <q-space />
     <q-list bordered separator>
       <q-item v-ripple clickable @click="clearSettings">
