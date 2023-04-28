@@ -3,39 +3,60 @@
     <q-card
       v-for="(delayFunction, index) in delayFunctions"
       :key="index"
-      class="column"
+      class="column q-px-md q-py-sm"
       bordered
       flat
     >
-      <div class="q-pt-sm q-px-md">
+      <div class="row justify-between items-center">
         <div>错误类型：{{ delayFunction.name }}</div>
+        <q-toggle
+          :disable="index === 0"
+          label="启用"
+          v-model="delayFunction.enable"
+        />
+      </div>
+      <div class="row items-center q-gutter-x-md">
         <q-slider
+          class="col-grow"
           :color="delayFunction.borderColor"
           label
-          markers
           :max="0.15"
           :min="-0.15"
-          :model-value="delayFunction.slope"
-          :step="0.005"
-          @change="
-            (val) => {
-              delayFunction.slope = val;
-            }
-          "
+          :step="0.001"
+          v-model.number="delayFunction.slope"
         />
+        <q-input
+          :color="delayFunction.borderColor"
+          dense
+          label="斜率"
+          outlined
+          type="number"
+          v-model.number="delayFunction.slope"
+          style="width: 100px"
+          @keydown.down="delayFunction.slope -= 0.001"
+          @keydown.up="delayFunction.slope += 0.001"
+        />
+      </div>
+      <div class="row items-center q-gutter-x-md">
         <q-slider
+          class="col-grow"
           :color="delayFunction.borderColor"
           label
-          markers
           :max="200"
           :min="-200"
-          :model-value="delayFunction.offset"
-          :step="10"
-          @change="
-            (val) => {
-              delayFunction.offset = val;
-            }
-          "
+          :step="1"
+          v-model.number="delayFunction.offset"
+        />
+        <q-input
+          :color="delayFunction.borderColor"
+          dense
+          label="X轴偏移"
+          outlined
+          type="number"
+          v-model.number="delayFunction.offset"
+          style="width: 100px"
+          @keydown.down="delayFunction.slope -= 1"
+          @keydown.up="delayFunction.slope += 1"
         />
       </div>
     </q-card>

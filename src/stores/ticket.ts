@@ -6,6 +6,7 @@ import { gm_storage } from '@/utils/storage';
 
 export interface DelayFunction {
   name: string;
+  enable: boolean;
   borderColor: string;
   slope: number;
   offset: number;
@@ -14,30 +15,35 @@ export interface DelayFunction {
 const defaultDelayFunctions: DelayFunction[] = [
   {
     name: '默认（减少延迟）',
+    enable: true,
     borderColor: 'green',
     slope: 0.04,
     offset: -50,
   },
   {
     name: '系统繁忙，请稍后再试',
+    enable: true,
     borderColor: 'blue',
     slope: -0.05,
     offset: -150,
   },
   {
     name: '服务器压力过大，请您稍后再试。',
+    enable: true,
     borderColor: 'purple',
     slope: -0.065,
     offset: -130,
   },
   {
     name: '请求过于频繁！',
+    enable: true,
     borderColor: 'amber',
     slope: -0.1,
     offset: -150,
   },
   {
     name: '请求失败',
+    enable: true,
     borderColor: 'red',
     slope: -0.065,
     offset: -200,
@@ -47,30 +53,35 @@ const defaultDelayFunctions: DelayFunction[] = [
 const lightDelayFunctions: DelayFunction[] = [
   {
     name: '默认（减少延迟）',
+    enable: true,
     borderColor: 'green',
     slope: 0.04,
     offset: -50,
   },
   {
     name: '系统繁忙，请稍后再试',
+    enable: true,
     borderColor: 'blue',
     slope: -0.05,
     offset: -150,
   },
   {
     name: '服务器压力过大，请您稍后再试。',
+    enable: true,
     borderColor: 'purple',
     slope: -0.065,
     offset: -130,
   },
   {
     name: '请求过于频繁！',
+    enable: true,
     borderColor: 'amber',
     slope: -0.1,
     offset: -150,
   },
   {
     name: '请求失败',
+    enable: true,
     borderColor: 'red',
     slope: -0.065,
     offset: -200,
@@ -80,30 +91,35 @@ const lightDelayFunctions: DelayFunction[] = [
 const heavyDelayFunctions: DelayFunction[] = [
   {
     name: '默认（减少延迟）',
+    enable: true,
     borderColor: 'green',
     slope: 0.04,
     offset: -50,
   },
   {
     name: '系统繁忙，请稍后再试',
+    enable: false,
     borderColor: 'blue',
     slope: -0.03,
     offset: -150,
   },
   {
     name: '服务器压力过大，请您稍后再试。',
+    enable: true,
     borderColor: 'purple',
     slope: -0.05,
     offset: -125,
   },
   {
     name: '请求过于频繁！',
+    enable: true,
     borderColor: 'amber',
     slope: -0.7,
     offset: -150,
   },
   {
     name: '请求失败',
+    enable: true,
     borderColor: 'red',
     slope: -0.75,
     offset: -200,
@@ -117,7 +133,7 @@ export const useSettingsStore = defineStore(
 
     function getDelay(name: string, input: number): number {
       const delayFunction =
-        delayFunctions.value.find((df) => df.name === name) ??
+        delayFunctions.value.find((df) => df.enable && df.name === name) ??
         delayFunctions.value[0];
       return delayFunction.slope * (input + delayFunction.offset);
     }

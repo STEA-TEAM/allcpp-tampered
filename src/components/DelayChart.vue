@@ -19,6 +19,7 @@ const chartData = computed(() => {
     .map((_, index) => index * 50);
   const datasets = [];
   for (const delayFunction: DelayFunction of delayFunctions.value) {
+    if (!delayFunction.enable) continue;
     const { name, borderColor, slope, offset } = delayFunction;
     datasets.push({
       label: name,
@@ -39,9 +40,6 @@ const chartOptions = {
   },
   maintainAspectRatio: false,
   plugins: {
-    legend: {
-      position: 'bottom',
-    },
     tooltip: {
       enabled: true,
     },

@@ -7,7 +7,7 @@
     side="left"
     :width="500"
   >
-    <div class="col-4 column items-center q-my-sm">
+    <div class="column items-center q-my-sm" style="height: 500px">
       <DelayChart />
     </div>
     <DelayConfigurator />
