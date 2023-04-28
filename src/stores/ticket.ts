@@ -114,14 +114,14 @@ const heavyDelayFunctions: DelayFunction[] = [
     name: '请求过于频繁！',
     enable: true,
     borderColor: 'amber',
-    slope: -0.7,
+    slope: -0.07,
     offset: -150,
   },
   {
     name: '请求失败',
     enable: true,
     borderColor: 'red',
-    slope: -0.75,
+    slope: -0.075,
     offset: -200,
   },
 ];
@@ -132,10 +132,17 @@ export const useSettingsStore = defineStore(
     const delayFunctions: Ref<DelayFunction[]> = ref(defaultDelayFunctions);
 
     function getDelay(name: string, input: number): number {
-      const delayFunction =
-        delayFunctions.value.find((df) => df.enable && df.name === name) ??
-        delayFunctions.value[0];
-      return delayFunction.slope * (input + delayFunction.offset);
+      const delayFunction = delayFunctions.value.find(
+        (df) => df.enable && df.name === name
+      );
+      if (delayFunction) {
+        const delay = delayFunction.slope * (input + delayFunction.offset);
+        return delay > 0 ? delay : 0;
+      }
+      const delay =
+        delayFunctions.value[0].slope *
+        (input + delayFunctions.value[0].offset);
+      return -(delay > 0.1 ? delay : 0.1);
     }
 
     function preset(type: 'default' | 'light' | 'heavy') {

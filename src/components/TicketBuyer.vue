@@ -69,17 +69,7 @@ const buyTicket = async () => {
     .catch((err) => {
       const errorMessage = getErrorMessage(err);
       const delay = getDelay(errorMessage, dynamicBuyDelay.value);
-      switch (errorMessage) {
-        case '系统繁忙，请稍后再试':
-        case '服务器压力过大，请您稍后再试。':
-        case '请求过于频繁！':
-        case '请求失败':
-          dynamicBuyDelay.value += delay > 0 ? delay : 0;
-          break;
-        default:
-          dynamicBuyDelay.value -= delay > 0.1 ? delay : 0.1;
-          break;
-      }
+      dynamicBuyDelay.value += delay;
       if (props.errors.has(errorMessage)) {
         updateErrors(errorMessage, props.errors.get(errorMessage) + 1);
       } else {
