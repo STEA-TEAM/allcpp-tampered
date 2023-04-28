@@ -30,11 +30,10 @@
           dense
           label="斜率"
           outlined
-          type="number"
           v-model.number="delayFunction.slope"
           style="width: 100px"
-          @keydown.down="delayFunction.slope -= 0.001"
-          @keydown.up="delayFunction.slope += 0.001"
+          @keydown.down.prevent="delayFunction.slope -= 0.001"
+          @keydown.up.prevent="delayFunction.slope += 0.001"
         />
       </div>
       <div class="row items-center q-gutter-x-md">
@@ -42,8 +41,8 @@
           class="col-grow"
           :color="delayFunction.borderColor"
           label
-          :max="200"
-          :min="-200"
+          :max="100"
+          :min="-300"
           :step="1"
           v-model.number="delayFunction.offset"
         />
@@ -52,11 +51,10 @@
           dense
           label="X轴偏移"
           outlined
-          type="number"
           v-model.number="delayFunction.offset"
           style="width: 100px"
-          @keydown.down="delayFunction.slope -= 1"
-          @keydown.up="delayFunction.slope += 1"
+          @keydown.down.prevent="delayFunction.offset -= 1"
+          @keydown.up.prevent="delayFunction.offset += 1"
         />
       </div>
     </q-card>
