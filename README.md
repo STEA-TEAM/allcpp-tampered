@@ -25,15 +25,42 @@
   始终允许".
 - 需要在至少 1400 x 800 以上的逻辑分辨率下使用.
 
-| 正式版 (GhProxy 加速)                                                                                            | 正式版 (GitHub 源)                                                                          |
-|-------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| 正式版 (GhProxy 加速)                                                                                                      | 正式版 (GitHub 源)                                                                                    |
+|-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
 | [安装](https://ghproxy.com/https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/allcpp-evolved.user.js) | [安装](https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/allcpp-evolved.user.js) |
 
 # 功能
 
-脚本启用后, 在【活动购票】网页左侧会有功能面板。
+## 主面板
 
-![side_panel](.github/assets/images/side_panel.jpg)
+脚本启用后, 在【活动详情】网页左侧会有一个功能面板，右侧的购票须知会被移除。
+
+![panel_all](.github/assets/images/panel_all.jpg)
+
+### 选票板块
+
+选票板块会在主面板加载完毕后自动读取当前活动的门票信息，选中票种会自动判断是否需要验证购票人，并改变“购票数量”输入框样式。
+
+![panel_tickets_count](.github/assets/images/panel_tickets_count.jpg)
+![panel_tickets_purchaser](.github/assets/images/panel_tickets_purchaser.jpg)
+
+### 动态延迟配置板块
+
+动态延迟配置板块在抢票时会根据返回的错误信息动态修改请求延迟，脚本内置了三套针对不同服务器负载情况的延迟配置，可以在此板块中修改。
+
+![panel_delay](.github/assets/images/panel_delay.jpg)
+
+### 错误列表板块
+
+错误列表板块在抢票时会统计返回的错误信息。
+
+![panel_errors](.github/assets/images/panel_errors.jpg)
+
+## 抽屉面板
+
+点击主面板顶栏左上角的汉堡按钮可打开抽屉面板，在面板中可以详细调整各个错误信息对应的动态延迟函数参数。
+
+![panel_drawer](.github/assets/images/panel_drawer.jpg)
 
 # 兼容性
 
