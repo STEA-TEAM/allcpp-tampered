@@ -117,6 +117,8 @@ function header(dev: boolean) {
 
       if (dev) {
         config.name = config.name + ' [Dev]';
+        delete config.updateURL;
+        delete config.downloadURL;
         if (config.require === undefined) {
           config.require = [];
         }

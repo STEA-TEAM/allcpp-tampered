@@ -27,10 +27,10 @@
           :color="delayFunction.borderColor"
           label
           markers
-          :max="50"
-          :min="-50"
+          :max="200"
+          :min="-200"
           :model-value="delayFunction.offset"
-          :step="5"
+          :step="10"
           @change="
             (val) => {
               delayFunction.offset = val;

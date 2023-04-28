@@ -15,166 +15,72 @@
       :options="purchasers"
       :selected="selectedTicket"
     />
-    <q-btn
-      :color="buyInterval ? 'negative' : 'primary'"
-      :disable="
-        !selectedTicket ||
-        (selectedTicket.validate && selectedPurchasers.length === 0)
-      "
-      :label="buyInterval ? '停止抢票' : '开始抢票'"
-      size="xl"
-      @click="toggleBuyState"
+    <TicketBuyer
+      :errors="errors"
+      :ticket="selectedTicket?.id ?? 0"
+      :count="ticketCount"
+      :purchasers="selectedPurchasers.map((p) => p.id)"
+      :validate="selectedTicket?.validate ?? false"
+      @update:errors="errors.set($event[0], $event[1])"
+      v-model="dynamicBuyDelay"
     />
     <q-separator />
     <div class="row items-center">
-      <div class="text-h6 text-black">请求错误列表</div>
-      <q-space />
-      <div>动态延迟：</div>
-      <q-circular-progress
-        :color="
-          dynamicBuyInterval >= 40
-            ? 'red'
-            : dynamicBuyInterval >= 30
-            ? 'amber'
-            : dynamicBuyInterval >= 20
-            ? 'light-green'
-            : 'green'
-        "
-        :max="250"
-        :min="50"
-        :value="dynamicBuyInterval * 5"
-        show-value
-        size="xl"
-        track-color="grey-4"
-      >
-        <div class="column items-center">
-          <div
-            :class="
-              dynamicBuyInterval >= 40
-                ? 'text-red'
-                : dynamicBuyInterval >= 30
-                ? 'text-amber'
-                : dynamicBuyInterval >= 20
-                ? 'text-light-green'
-                : 'text-green'
-            "
-            class="text-center"
-          >
-            {{ (dynamicBuyInterval * 5).toFixed(1) }}
-          </div>
-          <div class="text-grey text-center">ms</div>
+      <div class="column q-gutter-y-sm">
+        <div class="text-h6 text-black">动态延迟配置</div>
+        <div class="row q-gutter-x-md">
+          <q-btn color="primary" label="默认配置" @click="preset('default')" />
+          <q-btn color="primary" label="低负载" @click="preset('light')" />
+          <q-btn color="primary" label="高负载" @click="preset('heavy')" />
         </div>
-      </q-circular-progress>
+      </div>
+      <q-space />
+      <div class="text-body1">动态延迟：</div>
+      <DelayIndicator v-model="dynamicBuyDelay" />
     </div>
+    <div class="column items-center q-my-sm" style="min-height: 300px">
+      <DelayChart />
+    </div>
+    <q-separator />
+    <div class="text-h6 text-black">请求错误列表</div>
     <ErrorList :model-value="errors" />
   </q-page>
 </template>
 
 <script lang="ts" setup>
+import { useQuasar } from 'quasar';
 import { reactive, Ref, ref } from 'vue';
 
+import DelayChart from '@/components/DelayChart.vue';
+import DelayIndicator from '@/components/DelayIndicator.vue';
 import ErrorList from '@/components/ErrorList.vue';
-import TicketList from '@/components/TicketList.vue';
+import TicketBuyer from '@/components/TicketBuyer.vue';
 import TicketCount from '@/components/TicketCount.vue';
+import TicketList from '@/components/TicketList.vue';
 import TicketPurchaser from '@/components/TicketPurchaser.vue';
 import type { Purchaser, Ticket } from '@/components/models';
-
 import { useSettingsStore } from '@/stores/ticket';
-import {
-  buyTicketAlipay,
-  getPurchaserList,
-  getTicketList,
-} from '@/utils/network';
-import { getErrorMessage } from '@/utils/message';
+import { getPurchaserList, getTicketList } from '@/utils/network';
 
-const { getDelay } = useSettingsStore();
-console.log(getDelay('默认', 25));
+const { notify } = useQuasar();
+const { preset } = useSettingsStore();
 
-const tickets = reactive([]);
+const tickets = reactive(new Array<Ticket>());
 const selectedTicket: Ref<Ticket | undefined> = ref(undefined);
-
 const ticketCount = ref(1);
-
 const purchasers: Purchaser[] = reactive([]);
 const selectedPurchasers: Ref<Purchaser[]> = ref([]);
-
-const buyInterval = ref(0);
-const dynamicBuyInterval = ref(25);
-const errors = reactive({});
-
-let dynamicBuyCounter = 0;
-
-const resetInterval = () => {
-  clearInterval(buyInterval.value);
-  buyInterval.value = 0;
-  dynamicBuyCounter = 0;
-  dynamicBuyInterval.value = 25;
-};
-
-const toggleBuyState = () => {
-  if (buyInterval.value) {
-    resetInterval();
-  } else {
-    buyInterval.value = setInterval(async () => {
-      if (dynamicBuyInterval.value > 50) {
-        dynamicBuyInterval.value = 50;
-      }
-      if (dynamicBuyCounter < dynamicBuyInterval.value) {
-        dynamicBuyCounter++;
-        return;
-      } else {
-        dynamicBuyCounter = 0;
-      }
-      buyTicketAlipay(
-        <number>selectedTicket.value?.id,
-        purchasers.map((purchaser) => purchaser.id)
-      )
-        .then(() => resetInterval())
-        .catch((err) => {
-          const errorMessage = getErrorMessage(err);
-          let delay = (dynamicBuyInterval.value - 10) / 25;
-          switch (errorMessage) {
-            case '系统繁忙，请稍后再试':
-              delay = (30 - dynamicBuyInterval.value) / 20;
-              if (delay > 0) {
-                dynamicBuyInterval.value += delay;
-              }
-              break;
-            case '服务器压力过大，请您稍后再试。':
-              delay = (25 - dynamicBuyInterval.value) / 15;
-              if (delay > 0) {
-                dynamicBuyInterval.value += delay;
-              }
-              break;
-            case '请求过于频繁！':
-              delay = (30 - dynamicBuyInterval.value) / 10;
-              if (delay > 0) {
-                dynamicBuyInterval.value += delay;
-              }
-              break;
-            case '请求失败':
-              delay = (40 - dynamicBuyInterval.value) / 15;
-              if (delay > 0) {
-                dynamicBuyInterval.value += delay;
-              }
-              break;
-            default:
-              dynamicBuyInterval.value -= delay > 0.1 ? delay : 0.1;
-              break;
-          }
-          if (errors[errorMessage]) {
-            errors[errorMessage] += 1;
-          } else {
-            errors[errorMessage] = 1;
-          }
-        });
-    }, 5);
-  }
-};
+const errors = reactive(new Map<string, number>());
+const dynamicBuyDelay = ref(125);
 
 getPurchaserList()
   .then((purchaserList) => purchasers.push(...purchaserList))
-  .catch((error) => console.log(error));
+  .catch((error) =>
+    notify({
+      type: 'negative',
+      message: error.message,
+    })
+  );
 
 getTicketList(
   Object.fromEntries(
@@ -184,8 +90,13 @@ getTicketList(
       .map((pair) => pair.split('='))
   ).event
 )
-  .then((ticketList) => tickets.push(...ticketList))
-  .catch((error) => console.log(error));
+  .then((ticketList: Ticket[]) => tickets.push(...ticketList))
+  .catch((error) =>
+    notify({
+      type: 'negative',
+      message: error.message,
+    })
+  );
 </script>
 
 <style scoped></style>

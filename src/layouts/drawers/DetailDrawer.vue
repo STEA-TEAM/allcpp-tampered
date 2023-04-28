@@ -1,13 +1,13 @@
 <template>
   <q-drawer
-    class="column overflow-hidden"
+    class="column scrollbar-container"
     behavior="desktop"
     bordered
     overlay
     side="left"
     :width="500"
   >
-    <div class="col-4 column items-center q-mx-lg q-my-sm">
+    <div class="col-4 column items-center q-my-sm">
       <DelayChart />
     </div>
     <DelayConfigurator />
@@ -54,4 +54,4 @@ const clearSettings = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped lang="scss"></style>

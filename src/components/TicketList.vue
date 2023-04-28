@@ -1,5 +1,10 @@
 <template>
-  <q-list v-show="options.length > 0" bordered separator>
+  <q-list
+    v-show="options.length > 0"
+    bordered
+    :dense="options.length > 3"
+    separator
+  >
     <q-item
       v-for="(ticket, index) in options"
       :key="index"

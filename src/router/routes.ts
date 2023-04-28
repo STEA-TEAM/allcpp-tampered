@@ -32,7 +32,7 @@ export const routes = [
               className: 'margin-top-nav',
               style: [
                 'min-height: 1024px',
-                'height: auto',
+                'height: calc(100vh - 105px)',
                 'width: 500px',
               ].join('; '),
             },

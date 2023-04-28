@@ -5,6 +5,7 @@ import type {
   ErrorResponse,
   LoadResponse,
   Purchaser,
+  Ticket,
   TicketType,
 } from '@/components/models';
 
@@ -17,8 +18,10 @@ declare function GM_xmlhttpRequest(details: {
   onerror: (error: ErrorResponse) => void;
 }): void;
 
+const keyStart = atob('MngwNTJBMEExdTIyMg==');
+const KeyEnd = atob('MnNGUnM=');
+
 function getCrypto(ticketTypeId: number) {
-  const keyStart = atob('MngwNTJBMEExdTIyMg==');
   const seconds = Math.round(new Date().getTime() / 1e3);
   const randomStr = (() => {
     const stringList = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
@@ -30,7 +33,6 @@ function getCrypto(ticketTypeId: number) {
     }
     return result;
   })();
-  const KeyEnd = atob('MnNGUnM=');
   return {
     nonce: randomStr,
     timeStamp: seconds,
@@ -44,16 +46,22 @@ function htmlToElement(html: string) {
   return template.content.firstChild as HTMLElement;
 }
 
-const buyTicketAlipay = (ticketTypeId: number, purchaserIds: number[]) => {
+const buyTicketAlipay = (
+  ticketTypeId: number,
+  ticketCount?: number,
+  purchaserIds?: number[]
+) => {
   const { nonce, timeStamp, sign } = getCrypto(ticketTypeId);
-  const url =
+  let url =
     'https://www.allcpp.cn/allcpp/ticket/buyTicketAlipay.do?' +
     `ticketTypeId=${ticketTypeId}&` +
-    `count=${purchaserIds.length}&` +
+    `count=${ticketCount ?? purchaserIds?.length}&` +
     `nonce=${nonce}&` +
     `timeStamp=${timeStamp}&` +
-    `sign=${sign}&` +
-    `purchaserIds=${purchaserIds.join()}`;
+    `sign=${sign}`;
+  if (!ticketCount && purchaserIds && purchaserIds.length > 0) {
+    url += `&purchaserIds=${purchaserIds.join()}`;
+  }
   return new Promise((resolve, reject) => {
     GM_xmlhttpRequest({
       fetch: true,
@@ -112,16 +120,16 @@ const getTicketList = (eventMainId: number) => {
       url: `https://www.allcpp.cn/allcpp/ticket/getTicketTypeList.do?eventMainId=${eventMainId}`,
       onload: ({ response }) => {
         resolve(
-          (<{ ticketTypeList: TicketType[] }>response).ticketTypeList.map(
-            (ticketType: TicketType) => ({
-              id: ticketType.id,
-              name: ticketType.ticketName,
-              limit: ticketType.purchaseNum,
-              price: (ticketType.ticketPrice / 100).toFixed(2),
-              remain: ticketType.remainderNum,
-              validate: ticketType.realnameAuth,
-            })
-          )
+          <Ticket[]>(<{ ticketTypeList: TicketType[] }>(
+            response
+          )).ticketTypeList.map((ticketType: TicketType) => ({
+            id: ticketType.id,
+            name: ticketType.ticketName,
+            limit: ticketType.purchaseNum,
+            price: ticketType.ticketPrice / 100,
+            remain: ticketType.remainderNum,
+            validate: ticketType.realnameAuth,
+          }))
         );
       },
       onerror: (error) => {

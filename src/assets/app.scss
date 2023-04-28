@@ -1,0 +1,70 @@
+@import 'quasar/dist/quasar.sass';
+@import 'src/assets/quasar-variables.scss';
+
+@mixin custom-scrollbar($isDark: false, $isPage: false) {
+  overflow: auto !important;
+  &::-webkit-scrollbar {
+    background-color: transparent;
+    height: 0;
+    width: 16px;
+
+    &-button {
+      display: none;
+    }
+
+    &-thumb {
+      @if $isDark {
+        background-color: $grey-6;
+        @if $isPage {
+          border-color: $dark-page;
+        } @else {
+          border-color: $dark;
+        }
+      } @else {
+        background-color: $grey-4;
+        @if $isPage {
+          border-color: $light-page;
+        } @else {
+          border-color: $light;
+        }
+      }
+      border-width: 4px;
+      border-style: solid;
+      border-radius: 8px;
+      right: 4px;
+      width: 8px;
+
+      &:hover {
+        background-color: $grey-5;
+      }
+    }
+
+    &-track {
+      background-color: transparent;
+    }
+  }
+}
+
+body.body--dark {
+  .scrollbar {
+    &-container {
+      @include custom-scrollbar(true);
+    }
+
+    &-page {
+      @include custom-scrollbar(true, true);
+    }
+  }
+}
+
+body.body--light {
+  .scrollbar {
+    &-container {
+      @include custom-scrollbar(false, false);
+    }
+
+    &-page {
+      @include custom-scrollbar(false, true);
+    }
+  }
+}

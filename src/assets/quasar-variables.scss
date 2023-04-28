@@ -1,11 +1,29 @@
+$black: #000000;
+
+$grey-1: #FAFAFA;
+$grey-2: #F4F4F5;
+$grey-3: #E4E4E7;
+$grey-4: #D4D4D8;
+$grey-5: #A1A1AA;
+$grey-6: #71717A;
+$grey-7: #52525B;
+$grey-8: #3F3F46;
+$grey-9: #27272A;
+$grey-10: #18181B;
+$grey: $grey-5;
+
+$white: #FFFFFF;
+
 $primary: #dcc69c;
 $secondary: #26a69a;
 $accent: #9c27b0;
 
-$dark: #1d1d1d;
-$dark-page: #181a1b;
+$dark: $grey-9;
+$dark-page: $grey-10;
+$light: $grey-2;
+$light-page: $grey-1;
 
-$positive: #21ba45;
-$negative: #c10015;
-$info: #31ccec;
-$warning: #f2c037;
+$positive: #22C55E;
+$negative: #F04118;
+$info: #00C2F0;
+$warning: #F0B018;

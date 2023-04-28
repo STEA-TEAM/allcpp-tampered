@@ -14,25 +14,21 @@ const { getPaletteColor } = colors;
 const { delayFunctions } = storeToRefs(useSettingsStore());
 
 const chartData = computed(() => {
+  const inputs = Array(6).fill(0).map((_, index) => index * 50);
   const datasets = [];
   for (const delayFunction: DelayFunction of delayFunctions.value) {
     const { name, borderColor, slope, offset } = delayFunction;
     datasets.push({
       label: name,
       borderColor: getPaletteColor(borderColor),
-      data: Array(5)
-        .fill(1)
-        .map((element, index) => slope * ((element + index) * 10 + offset) * 5),
+      data: inputs.map((input) => slope * (input + offset)),
     });
   }
   return {
-    labels: Array(5)
-      .fill(1)
-      .map((element, index) => (element + index) * 50),
+    labels: inputs,
     datasets,
   };
 });
-console.log(chartData);
 
 const chartOptions = {
   fill: false,
@@ -44,10 +40,6 @@ const chartOptions = {
     legend: {
       position: 'bottom',
     },
-    title: {
-      display: true,
-      text: '不同错误的动态延迟函数',
-    },
     tooltip: {
       enabled: true,
     },
@@ -55,6 +47,12 @@ const chartOptions = {
   radius: 0,
   responsive: true,
   scales: {
+    x:{
+      title: {
+        display: true,
+        text: '当前延迟(ms)'
+      }
+    },
     y: {
       grid: {
         color: ({ tick }) => {
@@ -62,6 +60,10 @@ const chartOptions = {
         },
       },
       min: -2,
+      title: {
+        display: true,
+        text: '生成延迟(ms)'
+      }
     },
   },
 };
