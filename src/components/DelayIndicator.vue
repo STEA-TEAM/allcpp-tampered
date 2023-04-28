@@ -10,7 +10,7 @@
         : 'green'
     "
     :max="250"
-    :min="50"
+    :min="0"
     :value="props.modelValue"
     show-value
     size="70px"

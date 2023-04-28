@@ -66,7 +66,8 @@ const buyTicket = async () => {
       const errorMessage = getErrorMessage(err);
       const newBuyDelay =
         dynamicBuyDelay.value + getDelay(errorMessage, dynamicBuyDelay.value);
-      dynamicBuyDelay.value = newBuyDelay < 250 ? newBuyDelay : 250;
+      dynamicBuyDelay.value =
+        newBuyDelay > 250 ? 250 : newBuyDelay < 0 ? 0 : newBuyDelay;
       if (props.errors.has(errorMessage)) {
         updateErrors(errorMessage, props.errors.get(errorMessage) + 1);
       } else {

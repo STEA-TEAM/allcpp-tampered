@@ -1,4 +1,4 @@
-import CryptoJS from 'crypto-js';
+import { MD5 } from 'crypto-js';
 import { v4 as uuid } from 'uuid';
 import type {
   BuySuccess,
@@ -36,7 +36,7 @@ function getCrypto(ticketTypeId: number) {
   return {
     nonce: randomStr,
     timeStamp: seconds,
-    sign: CryptoJS.MD5(keyStart + seconds + randomStr + ticketTypeId + KeyEnd),
+    sign: MD5(keyStart + seconds + randomStr + ticketTypeId + KeyEnd),
   };
 }
 
