@@ -14,7 +14,9 @@ const { getPaletteColor } = colors;
 const { delayFunctions } = storeToRefs(useSettingsStore());
 
 const chartData = computed(() => {
-  const inputs = Array(6).fill(0).map((_, index) => index * 50);
+  const inputs = Array(6)
+    .fill(0)
+    .map((_, index) => index * 50);
   const datasets = [];
   for (const delayFunction: DelayFunction of delayFunctions.value) {
     const { name, borderColor, slope, offset } = delayFunction;
@@ -47,11 +49,11 @@ const chartOptions = {
   radius: 0,
   responsive: true,
   scales: {
-    x:{
+    x: {
       title: {
         display: true,
-        text: '当前延迟(ms)'
-      }
+        text: '当前延迟(ms)',
+      },
     },
     y: {
       grid: {
@@ -62,8 +64,8 @@ const chartOptions = {
       min: -2,
       title: {
         display: true,
-        text: '生成延迟(ms)'
-      }
+        text: '生成延迟(ms)',
+      },
     },
   },
 };

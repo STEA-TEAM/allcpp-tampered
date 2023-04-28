@@ -27,8 +27,8 @@ const defaultDelayFunctions: DelayFunction[] = [
   {
     name: '服务器压力过大，请您稍后再试。',
     borderColor: 'purple',
-    slope: -1 / 15,
-    offset: -125,
+    slope: -0.065,
+    offset: -130,
   },
   {
     name: '请求过于频繁！',
@@ -39,7 +39,7 @@ const defaultDelayFunctions: DelayFunction[] = [
   {
     name: '请求失败',
     borderColor: 'red',
-    slope: -1 / 15,
+    slope: -0.065,
     offset: -200,
   },
 ];
@@ -60,8 +60,8 @@ const lightDelayFunctions: DelayFunction[] = [
   {
     name: '服务器压力过大，请您稍后再试。',
     borderColor: 'purple',
-    slope: -1 / 15,
-    offset: -125,
+    slope: -0.065,
+    offset: -130,
   },
   {
     name: '请求过于频繁！',
@@ -72,7 +72,7 @@ const lightDelayFunctions: DelayFunction[] = [
   {
     name: '请求失败',
     borderColor: 'red',
-    slope: -1 / 15,
+    slope: -0.065,
     offset: -200,
   },
 ];
@@ -136,7 +136,7 @@ export const useSettingsStore = defineStore(
       }
     }
 
-    return { delayFunctions, getDelay,preset };
+    return { delayFunctions, getDelay, preset };
   },
   {
     persist: {
