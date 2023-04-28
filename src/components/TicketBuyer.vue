@@ -82,7 +82,7 @@ const toggleBuyState = () => {
   if (buyInterval.value) {
     resetInterval();
   } else {
-    buyInterval.value = setInterval(buyTicket, 1);
+    buyInterval.value = setInterval(buyTicket, 5);
   }
 };
 </script>

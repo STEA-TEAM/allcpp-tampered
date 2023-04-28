@@ -114,15 +114,15 @@ const heavyDelayFunctions: DelayFunction[] = [
     name: '请求过于频繁！',
     enable: true,
     borderColor: 'amber',
-    slope: -0.08,
-    offset: -175,
+    slope: -0.04,
+    offset: -250,
   },
   {
     name: '请求失败',
     enable: true,
     borderColor: 'red',
-    slope: -0.1,
-    offset: -250,
+    slope: -0.062,
+    offset: -290,
   },
 ];
 
