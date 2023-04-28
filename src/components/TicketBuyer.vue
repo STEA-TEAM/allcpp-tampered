@@ -50,16 +50,12 @@ const resetInterval = () => {
 };
 
 const buyTicket = async () => {
-  if (dynamicBuyDelay.value > 250) {
-    dynamicBuyDelay.value = 250;
-  }
   const currentTime = new Date().getTime();
   if (currentTime - lastBuyTime < dynamicBuyDelay.value) {
     return;
   } else {
     lastBuyTime = currentTime;
   }
-
   buyTicketAlipay(
     props.ticket,
     props.validate ? undefined : props.count,
@@ -68,8 +64,9 @@ const buyTicket = async () => {
     .then(resetInterval)
     .catch((err) => {
       const errorMessage = getErrorMessage(err);
-      const delay = getDelay(errorMessage, dynamicBuyDelay.value);
-      dynamicBuyDelay.value += delay;
+      const newBuyDelay =
+        dynamicBuyDelay.value + getDelay(errorMessage, dynamicBuyDelay.value);
+      dynamicBuyDelay.value = newBuyDelay < 250 ? newBuyDelay : 250;
       if (props.errors.has(errorMessage)) {
         updateErrors(errorMessage, props.errors.get(errorMessage) + 1);
       } else {
