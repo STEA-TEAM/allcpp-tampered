@@ -1,13 +1,13 @@
 {
-  "name": "allcpp-evolved",
+  "name": "allcpp-tampered",
   "version": "1.4.7",
   "description": "An ALLCPP script for enhanced experience",
-  "homepage": "https://github.com/STEA-TEAM/allcpp-evolved#readme",
+  "homepage": "https://github.com/STEA-TEAM/allcpp-tampered#readme",
   "license": "LGPL-3.0",
   "author": "ParticleG <particle_g@outlook.com> (https://github.com/ParticleG)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/STEA-TEAM/allcpp-evolved"
+    "url": "https://github.com/STEA-TEAM/allcpp-tampered"
   },
   "scripts": {
     "dev": "vite build -m development",

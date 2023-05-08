@@ -1,6 +1,6 @@
 # 「 无差别同人站（ALLCPP）增强脚本 」
 
-[![Build](https://github.com/STEA-TEAM/allcpp-evolved/actions/workflows/main.yml/badge.svg)](https://github.com/STEA-TEAM/allcpp-evolved/actions/workflows/main.yml) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/STEA-TEAM/allcpp-evolved) ![GitHub all releases](https://img.shields.io/github/downloads/STEA-TEAM/allcpp-evolved/total)
+[![Build](https://github.com/STEA-TEAM/allcpp-tampered/actions/workflows/main.yml/badge.svg)](https://github.com/STEA-TEAM/allcpp-tampered/actions/workflows/main.yml) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/STEA-TEAM/allcpp-tampered) ![GitHub all releases](https://img.shields.io/github/downloads/STEA-TEAM/allcpp-tampered/total)
 
 [📦 安装](#安装)
 
@@ -27,7 +27,7 @@
 
 | 正式版 (GhProxy 加速)                                                                                                      | 正式版 (GitHub 源)                                                                                    |
 |-----------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|
-| [安装](https://ghproxy.com/https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/allcpp-evolved.user.js) | [安装](https://github.com/STEA-TEAM/allcpp-evolved/releases/latest/download/allcpp-evolved.user.js) |
+| [安装](https://ghproxy.com/https://github.com/STEA-TEAM/allcpp-tampered/releases/latest/download/allcpp-tampered.user.js) | [安装](https://github.com/STEA-TEAM/allcpp-tampered/releases/latest/download/allcpp-tampered.user.js) |
 
 # 功能
 
@@ -83,8 +83,8 @@
 ### 克隆并安装依赖
 
 ```bash
-git clone https://github.com/STEA-TEAM/allcpp-evolved.git
-cd allcpp-evolved
+git clone https://github.com/STEA-TEAM/allcpp-tampered.git
+cd allcpp-tampered
 pnpm install
 ```
 

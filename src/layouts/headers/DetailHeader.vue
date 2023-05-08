@@ -2,7 +2,7 @@
   <q-header bordered class="bg-primary text-white">
     <q-toolbar>
       <q-btn dense flat icon="menu" round @click="openDrawer" />
-      <q-toolbar-title> ALLCPP Evolved</q-toolbar-title>
+      <q-toolbar-title> ALLCPP Tampered</q-toolbar-title>
       <q-btn dense flat icon="more_vert" round />
     </q-toolbar>
   </q-header>
