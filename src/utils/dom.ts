@@ -9,7 +9,7 @@ import { sleep } from '@/utils/common';
  * @param {HTMLElement} neighborNode 邻居子元素，若指定则在该子元素之前插入
  * @return {HTMLElement} element 创建的新元素
  */
-const addElement = (
+export const addElement = (
   tagName: string,
   innerHTML = '',
   options = {},
@@ -27,7 +27,7 @@ const addElement = (
   return element;
 };
 
-const getElement = async (selector: string) => {
+export const getElement = async (selector: string) => {
   let element = document.querySelector(selector);
   while (element === undefined || element === null) {
     console.info(`Waiting for '${selector}' to be available...`);
@@ -37,8 +37,7 @@ const getElement = async (selector: string) => {
   return element;
 };
 
-// noinspection JSUnusedGlobalSymbols
-const getElementAll = async (selector: string) => {
+export const getElementAll = async (selector: string) => {
   let elements = document.querySelectorAll(selector);
   while (elements.length === 0) {
     console.info(`Waiting for '${selector}' to be available...`);
@@ -48,4 +47,8 @@ const getElementAll = async (selector: string) => {
   return elements;
 };
 
-export { addElement, getElement, getElementAll };
+export const htmlToElement = (html: string) => {
+  const template = document.createElement('template');
+  template.innerHTML = html.trim();
+  return template.content.firstChild as HTMLElement;
+};

@@ -11,7 +11,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 
-import { useSettingsStore } from '@/stores/ticket';
+import { useTicketStore } from '@/stores/ticket';
 import { buyTicketAlipay } from '@/utils/network';
 import { getErrorMessage } from '@/utils/message';
 
@@ -34,7 +34,7 @@ const dynamicBuyDelay = computed({
   },
 });
 
-const { getDelay } = useSettingsStore();
+const { getDelay } = useTicketStore();
 
 const buyInterval = ref(0);
 let lastBuyTime = 0;

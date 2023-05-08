@@ -126,8 +126,8 @@ const heavyDelayFunctions: DelayFunction[] = [
   },
 ];
 
-export const useSettingsStore = defineStore(
-  'settings',
+export const useTicketStore = defineStore(
+  'ticket',
   () => {
     const delayFunctions: Ref<DelayFunction[]> = ref(defaultDelayFunctions);
 

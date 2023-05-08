@@ -59,11 +59,11 @@ import TicketCount from '@/components/TicketCount.vue';
 import TicketList from '@/components/TicketList.vue';
 import TicketPurchaser from '@/components/TicketPurchaser.vue';
 import type { Purchaser, Ticket } from '@/components/models';
-import { useSettingsStore } from '@/stores/ticket';
+import { useTicketStore } from '@/stores/ticket';
 import { getPurchaserList, getTicketList } from '@/utils/network';
 
 const { notify } = useQuasar();
-const { preset } = useSettingsStore();
+const { preset } = useTicketStore();
 
 const tickets = reactive(new Array<Ticket>());
 const selectedTicket: Ref<Ticket | undefined> = ref(undefined);

@@ -9,6 +9,11 @@
     "GM_setValue",
     "GM_xmlhttpRequest"
   ],
-  "match": ["*://*.allcpp.cn/*"],
-  "connect": ["allcpp.cn"]
+  "match": [
+    "*://*.allcpp.cn/*"
+  ],
+  "run-at": "document-end",
+  "connect": [
+    "allcpp.cn"
+  ]
 }

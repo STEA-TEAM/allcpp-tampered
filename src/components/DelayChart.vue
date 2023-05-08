@@ -7,11 +7,11 @@ import { storeToRefs } from 'pinia';
 import { colors } from 'quasar';
 import { Line } from 'vue-chartjs';
 
-import { DelayFunction, useSettingsStore } from '@/stores/ticket';
+import { DelayFunction, useTicketStore } from '@/stores/ticket';
 import { computed } from 'vue';
 
 const { getPaletteColor } = colors;
-const { delayFunctions } = storeToRefs(useSettingsStore());
+const { delayFunctions } = storeToRefs(useTicketStore());
 
 const chartData = computed(() => {
   const inputs = Array(6)

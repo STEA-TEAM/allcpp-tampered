@@ -8,6 +8,7 @@ import type {
   Ticket,
   TicketType,
 } from '@/components/models';
+import { htmlToElement } from '@/utils/dom';
 
 declare function GM_xmlhttpRequest(details: {
   fetch?: boolean;
@@ -38,12 +39,6 @@ function getCrypto(ticketTypeId: number) {
     timeStamp: seconds,
     sign: MD5(keyStart + seconds + randomStr + ticketTypeId + KeyEnd),
   };
-}
-
-function htmlToElement(html: string) {
-  const template = document.createElement('template');
-  template.innerHTML = html.trim();
-  return template.content.firstChild as HTMLElement;
 }
 
 const buyTicketAlipay = (

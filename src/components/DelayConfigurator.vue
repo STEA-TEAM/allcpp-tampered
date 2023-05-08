@@ -63,9 +63,9 @@
 
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
-import { useSettingsStore } from '@/stores/ticket';
+import { useTicketStore } from '@/stores/ticket';
 
-const { delayFunctions } = storeToRefs(useSettingsStore());
+const { delayFunctions } = storeToRefs(useTicketStore());
 </script>
 
 <style scoped></style>

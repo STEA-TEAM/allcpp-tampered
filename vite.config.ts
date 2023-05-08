@@ -109,6 +109,7 @@ function header(dev: boolean) {
         config.updateURL ??
         `${packageJson.repository.url}/releases/latest/download/${FILE_NAME}`;
       config.downloadURL = config.downloadURL ?? config.updateURL;
+      config.webRequest = config.webRequest ? JSON.stringify(config.webRequest) : undefined;
 
       const outputChunk = <OutputChunk>(
         outputBundle[String(outputOptions.name).replace('dist/', '')]
